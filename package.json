@@ -13,6 +13,9 @@
     "axios-cookiejar-support": "^4.0.3",
     "express": "^4.17.2",
     "mysql2": "^2.3.3",
-    "tough-cookie": "^4.1.2"
+    "node-fetch-cookies": "^2.0.4",
+    "random-useragent": "^0.5.0",
+    "tough-cookie": "^4.1.2",
+    "xml-js": "^1.6.11"
   }
 }

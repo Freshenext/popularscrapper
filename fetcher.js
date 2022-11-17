@@ -1,23 +1,26 @@
 const URL = `https://popularenlinea.com/_api/web/lists/getbytitle('Rates')/items?$filter=ItemID%20eq%20%271%27`
 const { default: axios } = require('axios');
-const { CookieJar } = require('tough-cookie');
-const { wrapper } = require('axios-cookiejar-support');
+const agents = require('random-useragent')
 
 async function fetcher() {
+  const { CookieJar } = await import('node-fetch-cookies')
   const jar = new CookieJar();
-  const client = wrapper(
-    axios.create({
-      jar,
-      validateStatus: () => true,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0'
-      }
-    }));
-  await client.get(URL)
-  await new Promise((res) => setTimeout(res, 1000))
-  await client.get(URL)
-  await new Promise((res) => setTimeout(res, 1000))
-  return await client.get(URL)
+  const agent = agents.getRandom()
+  console.log('Fetch first')
+  await axios(URL, {
+    jar,
+    headers: {
+      'User-Agent': agent
+    }
+  })
+  console.log('Fetch second')
+  const data = await axios(URL, {
+    jar,
+    headers: {
+      'User-Agent': agent
+    }
+  });
+  console.log(data.data)
+  return data
 }
-
 module.exports = fetcher
