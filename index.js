@@ -28,10 +28,12 @@ async function insertTc({ compra, venta, ...rest }) {
 async function queryLastTc() {
   const conn = await getCon();
   const [rows] = await conn.execute("select * from tc order by id desc limit 1");
-  const { compra, venta, json } = rows[0];
+  const { compra, venta, json, ...rest } = rows[0];
   return {
     ...JSON.parse(json),
-    compra, venta
+    compra,
+    venta,
+    ...rest,
   }
 }
 
