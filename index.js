@@ -86,9 +86,12 @@ app.get('/csv', async (req, res) => {
 });
 
 app.get('/test', async (req, res) => {
-  const popularXml = await fetcher();
-  console.log(popularXml)
-  res.json(popularXml)
+  try {
+    const popularXml = await fetcher();
+    res.json(popularXml)
+  } catch (error) {
+    res.json({ error: true, message: error.toString(), trace: error.stack })
+  }
 })
 
 app.get('/man', async (req,res) => {
