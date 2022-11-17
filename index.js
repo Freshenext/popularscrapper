@@ -94,7 +94,7 @@ app.get('/test', async (req, res) => {
 app.get('/man', async (req,res) => {
   try {
     const popularXml = await fetchXml();
-    await axios.post('http://popularscrapper.francis.center/insert', { ...popularXml })
+    await axios.post('https://popularscrapper.francis.center/insert', { ...popularXml })
     return res.json({
       post: 'successful',
     })
