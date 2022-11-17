@@ -3,7 +3,9 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const mysql = require('mysql2/promise');
+const axios = require("axios");
 
+app.use(express.json())
 const DB = {
   host: 'localhost',
   user: 'frandev_popular',
@@ -85,7 +87,30 @@ app.get('/csv', async (req, res) => {
 
 app.get('/test', async (req, res) => {
   const { data: popularXml } = await fetcher();
+  console.log(popularXml)
   res.json(popularXml)
+})
+
+app.get('/man', async (req,res) => {
+  try {
+    const popularXml = await fetchXml();
+    await axios.post('http://popularscrapper.francis.center/insert', { ...popularXml })
+    return res.json({
+      post: 'successful',
+    })
+  } catch (error) {
+    return res.json({
+      post: 'unsuccessful',
+      error: error.toString(),
+      stack: error.stack,
+    })
+  }
+
+})
+
+app.post('/insert', async (req, res) => {
+  await insertTc({ ...req.body })
+  res.json({ inserted: true, ...req.body })
 })
 
 app.listen(PORT, () => {
