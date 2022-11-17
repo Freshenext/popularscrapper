@@ -43,20 +43,10 @@ async function fetchXml() {
 
 
 async function getTc() {
-  let counter = 0
-  let xml = {}
-  while (counter < 3) {
-    try {
-      xml = await fetchXml();
-      break;
-    } catch (error) {
-      console.log(`Errored while fetching XML`, error.toString())
-    }
-    counter += 1
-  }
+  let xml = await fetchXml();
   const { DollarBuyRate, DollarSellRate } = xml;
   let isInserted = false;
-  if (DollarBuyRate !== 0) {
+  if (DollarBuyRate && DollarBuyRate !== 0) {
     await insertTc({ compra: DollarBuyRate, venta: DollarSellRate, ...xml });
     isInserted = true
   }
