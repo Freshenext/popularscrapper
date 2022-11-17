@@ -63,7 +63,7 @@ app.get('/tc', async (req, res) => {
     const done = await getTc();
     return res.json(done);
   } catch (err) {
-    return res.json({ isInserted: false, error: 1, message: err.toString() });
+    return res.json({ isInserted: false, error: 1, message: err.toString(), trace: err.stack });
   }
 
 })
