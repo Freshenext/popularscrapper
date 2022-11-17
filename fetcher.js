@@ -13,6 +13,7 @@ async function fetcher() {
     }
   })
   console.log('Fetch second')
+  await new Promise(res => setTimeout(res, 1000))
   const data = await fetch(jar, URL, {
     headers: {
       'User-Agent': agent,

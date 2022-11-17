@@ -40,7 +40,7 @@ async function queryLastTc() {
 }
 
 async function fetchXml() {
-  const { data: popularXml } = await fetcher();
+  const popularXml = await fetcher();
   const { DollarBuyRate = 0, DollarSellRate = 0 } = popularXml?.value?.[0] || 0;
   return { DollarBuyRate, DollarSellRate, ...(popularXml?.value?.[0] && popularXml.value[0]) };
 }
@@ -86,7 +86,7 @@ app.get('/csv', async (req, res) => {
 });
 
 app.get('/test', async (req, res) => {
-  const { data: popularXml } = await fetcher();
+  const popularXml = await fetcher();
   console.log(popularXml)
   res.json(popularXml)
 })
