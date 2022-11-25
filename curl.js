@@ -18,7 +18,10 @@ async function runAxios(){
     return response.data
   } catch (error) {
     console.log('Error')
-    return {}
+    return {
+      error: error.toString(),
+      trace: error.trace,
+    }
   }
 }
 
