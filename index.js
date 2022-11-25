@@ -1,9 +1,9 @@
-const fetcher = require('./fetcher');
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const mysql = require('mysql2/promise');
-const axios = require("axios");
+const fetchXml = require('./fetchXml')
+const runAxios = require('./curl')
 
 app.use(express.json())
 const DB = {
@@ -38,13 +38,6 @@ async function queryLastTc() {
     ...rest,
   }
 }
-
-async function fetchXml() {
-  const popularXml = await fetcher();
-  const { DollarBuyRate = 0, DollarSellRate = 0 } = popularXml?.value?.[0] || 0;
-  return { DollarBuyRate, DollarSellRate, ...(popularXml?.value?.[0] && popularXml.value[0]) };
-}
-
 
 async function getTc() {
   let xml = await fetchXml();
@@ -86,32 +79,7 @@ app.get('/csv', async (req, res) => {
 });
 
 app.get('/test', async (req, res) => {
-  try {
-    const popularXml = await fetcher();
-    res.json(popularXml)
-  } catch (error) {
-    res.json({ error: true, message: error.toString(), trace: error.stack })
-  }
-})
-
-app.get('/man', async (req,res) => {
-  try {
-    const popularXml = await fetchXml();
-    await axios.post('https://popularscrapper.francis.center/insert', {
-      compra: popularXml.DollarBuyRate,
-      venta: popularXml.DollarSellRate,
-      ...popularXml })
-    return res.json({
-      post: 'successful',
-    })
-  } catch (error) {
-    return res.json({
-      post: 'unsuccessful',
-      error: error.toString(),
-      stack: error.stack,
-    })
-  }
-
+  return res.json(await runAxios())
 })
 
 app.post('/insert', async (req, res) => {
