@@ -32,9 +32,9 @@ async function queryLastTc() {
   const [rows] = await conn.execute("select * from tc order by id desc limit 1");
   const { compra, venta, json, ...rest } = rows[0];
   return {
-    ...JSON.parse(json),
     compra,
     venta,
+    ...JSON.parse(json),
     ...rest,
   }
 }
